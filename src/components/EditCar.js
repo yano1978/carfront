@@ -3,7 +3,8 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 
 const EditCar = props => {
   const [open, setOpen] = useState(false);
@@ -49,41 +50,42 @@ const EditCar = props => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Edit car</DialogTitle>
         <DialogContent>
-          <input
-            type="text"
-            placeholder="Brand"
+          <TextField
+            autoFocus
+            fullWidth
+            label="Brand"
             name="brand"
             value={car.brand}
             onChange={handleChange}
           />
           <br />
-          <input
-            type="text"
-            placeholder="Model"
+          <TextField
+            fullWidth
+            label="Model"
             name="model"
             value={car.model}
             onChange={handleChange}
           />
           <br />
-          <input
-            type="text"
-            placeholder="Color"
+          <TextField
+            fullWidth
+            label="Color"
             name="color"
             value={car.color}
             onChange={handleChange}
           />
           <br />
-          <input
-            type="text"
-            placeholder="Year"
+          <TextField
+            fullWidth
+            label="Year"
             name="year"
             value={car.year}
             onChange={handleChange}
           />
           <br />
-          <input
-            type="text"
-            placeholder="Price"
+          <TextField
+            fullWidth
+            label="Price"
             name="price"
             value={car.price}
             onChange={handleChange}
