@@ -3,24 +3,30 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import Button from "@material-ui/core/Button";
+import Button from '@material-ui/core/Button';
 
-const AddCar = props => {
+const EditCar = props => {
   const [open, setOpen] = useState(false);
   const [car, setCar] = useState({
     brand: "",
     model: "",
-    color: "",
     year: "",
-    fuel: "",
+    color: "",
     price: ""
   });
-  // Open the modal form
+
   const handleClickOpen = () => {
+    setCar({
+      brand: props.car.brand,
+      model: props.car.model,
+      color: props.car.color,
+      year: props.car.year,
+      fuel: props.car.fuel,
+      price: props.car.price
+    });
     setOpen(true);
   };
 
-  // Close the modal form
   const handleClose = () => {
     setOpen(false);
   };
@@ -29,24 +35,19 @@ const AddCar = props => {
     setCar({ ...car, [event.target.name]: event.target.value });
   };
 
-  // Save car and close modal form
+  // Update car and close modal form
   const handleSave = () => {
-    props.addCar(car);
+    props.upDateCar(car, props.link);
     handleClose();
   };
 
   return (
     <div>
-      <Button
-        variant="outlined"
-        color="primary"
-        style={{ margin: 10 }}
-        onClick={handleClickOpen}
-      >
-        New Car
+      <Button color="primary" size="small" onClick={handleClickOpen}>
+        Edit
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>New car</DialogTitle>
+        <DialogTitle>Edit car</DialogTitle>
         <DialogContent>
           <input
             type="text"
@@ -102,4 +103,4 @@ const AddCar = props => {
   );
 };
 
-export default AddCar;
+export default EditCar;

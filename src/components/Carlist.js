@@ -5,6 +5,9 @@ import "react-table-6/react-table.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddCar from "./AddCar";
+import EditCar from "./EditCar";
+import { CSVLink } from 'react-csv';
+import Button from "@material-ui/core/Button";
 
 class Carlist extends Component {
   constructor(props) {
@@ -37,6 +40,27 @@ class Carlist extends Component {
     })
       .then(res => this.fetchCars())
       .catch(err => console.error(err));
+  }
+
+  upDateCar(car, link) {
+    fetch(link, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(car)
+    })
+      .then(res => {
+        toast.success("Changes saved", {
+          position: toast.POSITION.BOTTOM_LEFT
+        });
+        this.fetchCars();
+      })
+      .catch(err =>
+        toast.error("Error when saving", {
+          position: toast.POSITION.BOTTOM_LEFT
+        })
+      );
   }
 
   // Delete car
@@ -77,8 +101,23 @@ class Carlist extends Component {
         accessor: "year"
       },
       {
-        Header: "Price €",
+        Header: "Price (€)",
         accessor: "price"
+      },
+      { 
+        id: "editbutton",
+        sortable: false,
+        filterable: false,
+        width: 100,
+        accessor: "_links.self.href",
+        Cell: ({ value, row }) => (
+          <EditCar
+            car={row}
+            link={value}
+            upDateCar={this.upDateCar}
+            fetchCars={this.fetchCars}
+          />
+        )
       },
       {
         id: "delbutton",
@@ -87,19 +126,20 @@ class Carlist extends Component {
         width: 100,
         accessor: "_links.self.href",
         Cell: ({ value }) => (
-          <button
+          <Button size="small" color="secondary" 
             onClick={() => {
               this.onDelClick(value);
             }}
           >
             Delete
-          </button>
+          </Button>
         )
       }
     ];
     return (
       <div className="App">
         <AddCar addCar={this.addCar} fetchCars={this.fetchCars} />
+        <CSVLink data={this.state.cars} separator=";">Export CSV</CSVLink>
         <ReactTable
           data={this.state.cars}
           columns={columns}
