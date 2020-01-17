@@ -32,10 +32,12 @@ class Carlist extends Component {
 
   // Add new car
   addCar(car) {
+    const token = sessionStorage.getItem("jwt");
     fetch(SERVER_URL + "api/cars", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type' : 'application/json',
+        'Authorization' : token
       },
       body: JSON.stringify(car)
     })
@@ -44,10 +46,12 @@ class Carlist extends Component {
   }
 
   upDateCar(car, link) {
+    const token = sessionStorage.getItem("jwt");
     fetch(link, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization' : token
       },
       body: JSON.stringify(car)
     })
@@ -67,7 +71,11 @@ class Carlist extends Component {
   // Delete car
   onDelClick = link => {
     if (window.confirm("Are you sure to delete?")) {
-      fetch(link, { method: "DELETE" })
+      const token = sessionStorage.getItem("jwt");
+      fetch(link, {
+        method: "DELETE",
+        headers: { Authorization: token }
+      })
         .then(res => {
           toast.success("Car deleted", {
             position: toast.POSITION.BOTTOM_LEFT
@@ -81,6 +89,23 @@ class Carlist extends Component {
           console.error(err);
         });
     }
+  };
+
+  // Fetch all cars
+  fetchCars = () => {
+    // Read the token from the session storage
+    // and include it to Authorization header
+    const token = sessionStorage.getItem("jwt");
+    fetch(SERVER_URL + "api/cars", {
+      headers: { Authorization: token }
+    })
+      .then(response => response.json())
+      .then(responseData => {
+        this.setState({
+          cars: responseData._embedded.cars
+        });
+      })
+      .catch(err => console.log(err));
   };
 
   render() {
@@ -145,7 +170,7 @@ class Carlist extends Component {
           <Grid item>
             <AddCar addCar={this.addCar} fetchCars={this.fetchCars} />
           </Grid>
-          <Grid item style={{padding: 15}}>
+          <Grid item style={{ padding: 15 }}>
             <CSVLink data={this.state.cars} separator=";">
               Export CSV
             </CSVLink>
