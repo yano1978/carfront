@@ -1,1 +1,1 @@
-export const SERVER_URL = 'https://carddatabaseapp.herokuapp.com/';
+export const SERVER_URL = 'https://carcardback.herokuapp.com/';
